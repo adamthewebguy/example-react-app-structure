@@ -25,6 +25,8 @@ Encapsulated units of business capability.
 
 Features are boundaries, not folders.
 
+---
+
 # features/\*/model/
 
 ## Purpose
@@ -52,51 +54,77 @@ Domain logic and state (React-agnostic).
 
 Models decide; they don’t orchestrate.
 
-features/_/hooks/
-Purpose
+---
+
+## features/\*/hooks/
+
+### Purpose
+
 Controller / ViewModel layer.
-What lives here
-Custom hooks that orchestrate model + data
-Side effects and lifecycle logic
-Loading / error / async coordination
-Why it exists
-React is good at orchestration, not business logic
-Keeps UI components thin
-Centralises side-effect complexity
-Rules
-Hooks may import model and data
-Hooks should not contain business rules
-Hooks should return intent-based APIs
-Hooks coordinate; they don’t decide.
-features/_/data/
-Purpose
+
+### What lives here
+
+- Custom hooks that orchestrate model + data
+
+### Why it exists
+
+- React is good at orchestration, not business logic
+- Keeps UI components thin
+- Centralises side-effect complexity
+
+### Rules
+
+- Hooks may import model and data
+- Hooks should not contain business rules
+- Hooks should return intent-based APIs
+- Hooks coordinate; they don’t decide.
+
+---
+
+## features/\*/data/
+
+### Purpose
+
 Data access and anti-corruption layer.
-What lives here
-Repository interfaces
-API / persistence implementations
-Data mapping and normalisation
-Why it exists
-Isolates the app from backend and transport details
-Makes APIs swappable and mockable
-Prevents HTTP from leaking upward
-Rules
-No React imports
-No UI logic
-Features depend on interfaces, not implementations
+
+### What lives here
+
+- Repository interfaces
+- API / persistence implementations
+- Data mapping and normalisation
+
+### Why it exists
+
+- Isolates the app from backend and transport details
+- Makes APIs swappable and mockable
+- Prevents HTTP from leaking upward
+
 Data is an implementation detail.
-features/\*/ui/
-Purpose
+
+---
+
+## features/\*/ui/
+
+### Purpose
+
 Presentation layer (Views).
-What lives here
-React components
-Styling and layout
-User interaction handling
-Why it exists
-Keeps UI replaceable
-Prevents business logic creep
-Encourages composition over inheritance
-Rules
-No HTTP calls
-Minimal state
-Prefer props over imports
+
+### What lives here
+
+- React components
+- Styling and layout
+- User interaction handling
+
+### Why it exists
+
+- Keeps UI replaceable
+- Prevents business logic creep
+- Encourages composition over inheritance
+
+### Rules
+
+- No HTTP calls
+- Minimal state
+- Prefer props over imports
+
 UI is disposable.

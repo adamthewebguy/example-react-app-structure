@@ -7,7 +7,7 @@ Reusable, non-domain-specific code.
 ## What lives here
 
 - Design system components
-- Generic hooks
+- Generic hooks (e.g. useAsync, useDebounce, useFetch, useMutation, useQuery, useScroll, useTheme, useTranslation, useUser, useViewport, etc. See https://usehooks.com and https://react-hooks-library.vercel.app/getting-started for inspiration!)
 - Utilities and helpers
 
 ## Why it exists

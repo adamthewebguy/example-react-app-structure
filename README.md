@@ -37,7 +37,7 @@ Architecture is enforced by import direction.
 ## Responsibility boundaries
 
 - UI: Render and capture intent
-- Hooks: Orchestrate and coordinate
+- Hooks: Orchestrate and coordinate (also see https://usehooks.com and https://react-hooks-library.vercel.app/getting-started for inspiration!)
 - Model: Decide and enforce rules
 - Data: Translate and isolate
 - Infrastructure: Transport and config
