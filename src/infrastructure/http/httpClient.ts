@@ -1,6 +1,23 @@
 import type { HttpClient, HttpRequestOptions } from "./types";
+import { getSession } from "../../integrations/supabase/supabaseAuth"; // Even when using Supabase directly, we still want a single entry point - this file!
+
 
 const baseUrl = "";
+
+/**
+ * This is the “ambient auth” trick:
+ * - user identity is injected once
+ * - features don’t pass userId around
+ * 
+ */
+export async function withUserContext<T>(
+  fn: (userId: string) => Promise<T>
+): Promise<T> {
+  const session = await getSession();
+  if (!session) throw new Error("Not authenticated");
+
+  return fn(session.user.id);
+}
 
 async function request<T>(
   method: "GET" | "POST",

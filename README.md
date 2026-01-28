@@ -53,6 +53,12 @@ When you’re unsure where something belongs, ask:
 - Would this survive a framework change? -> Not UI
 - Would this change if Stripe changes? -> Integration
 
+## Final Guiding Principle
+
+> **Structure the code so that doing the wrong thing feels uncomfortable.**
+
+This architecture doesn’t rely on discipline alone — it encodes intent into the filesystem.
+
 ## Folder Structure
 
 ```
@@ -60,23 +66,28 @@ src/
 ├── app/                             # Application wiring (composition root)
 │ ├── App.tsx
 │ ├── routes.tsx
-│ ├── providers/
+│ ├── providers/                     # Global provider. NOT features! These wrap the entire app; every page can use them.
 │ │ ├── AuthProvider.tsx
 │ │ ├── QueryProvider.tsx
 │ │ └── AppProviders.tsx
 │ │ └── ThemeProvider.tsx
 │ └── bootstrap.ts
 │
-├── pages/                           # Route-level composition. If routes.tsx controls routing, then pages/ should never import infra, repositories, or providers. It should only compose features + layout
+├── pages/                           # Route-level composition. Should be boring (all the interesting stuff should be in features/). Pages orchestrate features; they do not own behaviour.
+│ |                                  # If routes.tsx controls routing, then pages/ should never import infra, repositories, or providers. It should only compose features + layout
 │ ├── DashboardPage.tsx
 │ ├── LoginPage.tsx
 │ └── BillingPage.tsx
 │
-├── features/                        # The actual app
+├── features/                        # The actual app!
 │ ├── auth/
 │ │ ├── data/                        # Data Access (anti-corruption layer)
 │ │ │ ├── auth.api.ts                # Low-level API calls; "speaks backend" (HTTP semantics; code doesn't use this)
 │ │ │ └── auth.repository.ts         # High-level repository interface; "speaks domain" (code uses this)
+│ │ │
+│ │ ├── context/
+│ │ │ ├── AuthContext.tsx            # Optional, usually best in AuthProvider.tsx (if needed at all!). Best when multiple features (providers!) need/share it, and/or very large/complex features
+│ │ │ └── AuthProvider.tsx           # Optional, wraps hook & exposes context (this is the most common pattern). Providers are structure; context is plumbing — don’t expose plumbing unless you must!
 │ │ │
 │ │ ├── model/                       # Domain + state (but framework-agnostic..)
 │ │ │ ├── auth.types.ts
@@ -97,9 +108,18 @@ src/
 │ │ ├── data/
 │ │ │ ├── billing.api.ts
 │ │ │ └── billing.repository.ts
+│ │ │
+│ │ ├── context/
+│ │ │ ├── BillingContext.tsx       # Optional, could be in BillingProvider.tsx, or not at all!
+│ │ │ └── BillingProvider.tsx      # Optional, wraps hook & exposes context (this is the most common pattern)
+│ │ │
+│ │ ├── hooks/                       # Controller / ViewModel (React-specific)
+│ │ │ └── useBilling.ts             # Actual logic, used inside BillingProvider & elsewhere
+│ │ │
 │ │ ├── model/
 │ │ │ ├── billing.types.ts
 │ │ │ └── billing.logic.ts
+│ │ │
 │ │ ├── ui/
 │ │ │ ├── BillingSummary.tsx
 │ │ │ └── UpgradeButton.tsx
